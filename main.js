@@ -21,8 +21,9 @@ numButtons.forEach(button => {
             outputDisplay.textContent = "";
             }
         
-        outputDisplay.textContent += button.textContent;
-    
+        if (outputDisplay.textContent.length < 7){
+            outputDisplay.textContent += button.textContent;
+        }
     })
 })
 
@@ -40,15 +41,42 @@ operatorButtons.forEach(button => {
     })
 })
 
-equalButton.addEventListener('click' , ()=>{
-    numTwo = parseFloat(outputDisplay.textContent);
-    console.log(`2nd num is ${numTwo}`)
+equalButton.addEventListener('click', () => {
+    if (numOne == null || operand == null) {
+        console.error("numOne or operand is null");
+        return null;
+    }
 
+    numTwo = parseFloat(outputDisplay.textContent);
+    console.log(`2nd num is ${numTwo}`);
+
+
+    if (operand === "/" && numTwo === 0) {
+        outputDisplay.textContent = "OOPS, CAN'T DIVIDE BY ZERO!";
+    }
+
+    // Calculate result
     let result = operate(numOne, numTwo, operand);
+    console.log(typeof(result));
+
+    // Ensure result is a number
+    if (isNaN(result)) {
+        outputDisplay.textContent = "Error!";
+        console.error("Result is not a valid number!");
+        return;
+    }
+
     outputDisplay.textContent = result;
 
+    // Display result in scientific notation
+    if (outputDisplay.textContent.length >7){
+        outputDisplay.textContent = parseFloat(result).toExponential(2);
+    } else {
+        outputDisplay.textContent = result;
     }
-)
+    
+});
+
 
 clearButton.addEventListener('click', ()=>{
 
@@ -67,6 +95,8 @@ posNegButton.addEventListener("click", ()=>{
     }
     
 })
+
+// Hover effect over the buttons//
 
 allButtons.forEach(button =>{
 
@@ -89,21 +119,23 @@ allButtons.forEach(button =>{
 
 function addNum(numOne, numTwo){
 
-    return (numOne + numTwo).toFixed(3);
+    let add = numOne + numTwo 
+
+    return add.toFixed(2);
     
 }
 
 function subNum(numOne, numTwo){
-    return (numOne - numTwo).toFixed(3);
+    return (numOne - numTwo).toFixed(2);
 
 }
 
 function divNum(numOne, numTwo){
-        return (numOne / numTwo).toFixed(3);
+        return (numOne / numTwo).toFixed(2);
 }
 
 function mulNum(numOne, numTwo){
-        return (numOne*numTwo).toFixed(3);
+        return (numOne*numTwo).toFixed(2);
     
 }
 
@@ -119,9 +151,3 @@ function operate(numOne, numTwo, operator){
     }
 
 }
-
-
-
-
-
-
